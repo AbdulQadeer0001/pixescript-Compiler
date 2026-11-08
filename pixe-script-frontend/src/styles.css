@@ -1,0 +1,209 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-pixel-bg: var(--pixel-bg);
+  --color-pixel-panel: var(--pixel-panel);
+  --color-pixel-raised: var(--pixel-raised);
+  --color-pixel-line: var(--pixel-line);
+  --color-pixel-green: var(--pixel-green);
+  --color-pixel-pink: var(--pixel-pink);
+  --color-pixel-cyan: var(--pixel-cyan);
+  --color-pixel-amber: var(--pixel-amber);
+  --color-pixel-text: var(--pixel-text);
+  --color-pixel-dim: var(--pixel-dim);
+}
+
+:root {
+  --background: oklch(0.145 0.025 277);
+  --foreground: oklch(0.93 0.018 270);
+  --card: oklch(0.19 0.031 277);
+  --card-foreground: oklch(0.93 0.018 270);
+  --popover: oklch(0.19 0.031 277);
+  --popover-foreground: oklch(0.93 0.018 270);
+  --primary: oklch(0.88 0.23 152);
+  --primary-foreground: oklch(0.15 0.025 277);
+  --secondary: oklch(0.235 0.035 277);
+  --secondary-foreground: oklch(0.91 0.02 270);
+  --muted: oklch(0.235 0.035 277);
+  --muted-foreground: oklch(0.66 0.035 277);
+  --accent: oklch(0.29 0.055 277);
+  --accent-foreground: oklch(0.94 0.018 270);
+  --destructive: oklch(0.7 0.22 15);
+  --destructive-foreground: oklch(0.98 0.01 15);
+  --border: oklch(0.33 0.048 278);
+  --input: oklch(0.29 0.045 278);
+  --ring: oklch(0.79 0.2 153);
+  --pixel-bg: oklch(0.145 0.025 277);
+  --pixel-panel: oklch(0.19 0.031 277);
+  --pixel-raised: oklch(0.225 0.038 277);
+  --pixel-line: oklch(0.35 0.052 278);
+  --pixel-green: oklch(0.88 0.23 152);
+  --pixel-pink: oklch(0.76 0.22 355);
+  --pixel-cyan: oklch(0.81 0.13 210);
+  --pixel-amber: oklch(0.84 0.17 83);
+  --pixel-text: oklch(0.93 0.018 270);
+  --pixel-dim: oklch(0.66 0.035 277);
+  --pixel-shadow: 4px 4px 0 oklch(0.08 0.018 277);
+  --radius: 0px;
+}
+
+* { box-sizing: border-box; }
+
+@layer base {
+  * { border-color: var(--border); }
+  body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 13px;
+  }
+  button, input, textarea { font: inherit; }
+  ::selection { background: var(--pixel-green); color: var(--pixel-bg); }
+}
+
+.pixel-app {
+  min-height: 100vh;
+  background-image: linear-gradient(color-mix(in oklab, var(--pixel-line) 12%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--pixel-line) 12%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.pixel-header {
+  min-height: 66px;
+  border-bottom: 2px solid var(--pixel-line);
+  background: color-mix(in oklab, var(--pixel-bg) 94%, transparent);
+}
+.pixel-title {
+  font-family: "Press Start 2P", monospace;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.pixel-panel {
+  border: 2px solid var(--pixel-line);
+  background: var(--pixel-panel);
+  box-shadow: var(--pixel-shadow);
+}
+.pixel-toolbar-button {
+  height: 36px;
+  border: 2px solid var(--pixel-line);
+  padding: 0 12px;
+  background: var(--pixel-panel);
+  color: var(--pixel-text);
+  font-size: 11px;
+  font-weight: 700;
+  transition: border-color 120ms ease, color 120ms ease, transform 120ms ease;
+}
+.pixel-toolbar-button:hover { border-color: var(--pixel-green); color: var(--pixel-green); }
+.pixel-toolbar-button:active { transform: translate(2px, 2px); }
+.pixel-toolbar-button:focus-visible, .engine-tab:focus-visible, .editor-textarea:focus-visible {
+  outline: 2px solid var(--pixel-cyan);
+  outline-offset: 2px;
+}
+.editor-textarea, .highlight-layer, .line-gutter, .mono-block {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.85;
+  tab-size: 4;
+}
+.editor-textarea, .highlight-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  white-space: pre;
+  padding: 16px 18px;
+}
+.highlight-layer { pointer-events: none; color: var(--pixel-text); }
+.editor-textarea {
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--pixel-green);
+  -webkit-text-fill-color: transparent;
+}
+.editor-textarea::selection { background: color-mix(in oklab, var(--pixel-green) 36%, transparent); }
+.line-gutter { user-select: none; }
+.engine-tab {
+  position: relative;
+  display: flex;
+  min-width: 128px;
+  height: 48px;
+  align-items: center;
+  gap: 9px;
+  border: 2px solid transparent;
+  border-bottom: 2px solid var(--pixel-line);
+  padding: 0 12px;
+  color: var(--pixel-dim);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  transition: color 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.engine-tab:hover { color: var(--pixel-text); }
+.engine-tab[data-active="true"] { border-color: var(--pixel-green); background: var(--pixel-green); color: var(--pixel-bg); }
+.engine-tab[data-stale="true"] .status-dot { opacity: .35; }
+.status-dot { width: 8px; height: 8px; flex: 0 0 8px; background: var(--pixel-dim); }
+.status-dot[data-state="ok"] { background: var(--pixel-green); }
+.status-dot[data-state="error"] { background: var(--pixel-pink); }
+.status-dot[data-state="blocked"] { background: var(--pixel-amber); }
+.syntax-tree { border-left: 1px solid var(--pixel-line); }
+.pixel-table { width: 100%; border-collapse: collapse; text-align: left; }
+.pixel-table th { position: sticky; top: 0; z-index: 1; background: var(--pixel-raised); color: var(--pixel-dim); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.pixel-table th, .pixel-table td { border-bottom: 1px solid var(--pixel-line); padding: 9px 10px; vertical-align: top; }
+.pixel-table td { color: var(--pixel-text); font-size: 11px; }
+.pixel-table tr:last-child td { border-bottom: 0; }
+.token-keyword { color: var(--pixel-pink); }
+.token-identifier { color: var(--pixel-text); }
+.token-number { color: var(--pixel-amber); }
+.token-string { color: var(--pixel-green); }
+.token-operator { color: var(--pixel-cyan); }
+.token-delimiter { color: var(--pixel-dim); }
+.soft-scrollbar { scrollbar-color: var(--pixel-line) transparent; scrollbar-width: thin; }
+.soft-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+.soft-scrollbar::-webkit-scrollbar-thumb { background: var(--pixel-line); }
+.soft-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.pixel-drawer { border-top: 2px solid var(--pixel-line); background: var(--pixel-panel); box-shadow: 0 -4px 0 oklch(0.08 0.018 277); }
+.pixel-drawer-tab { border: 0; border-bottom: 2px solid transparent; padding: 12px 4px 10px; color: var(--pixel-dim); font-size: 11px; font-weight: 700; }
+.pixel-drawer-tab[data-active="true"] { border-bottom-color: var(--pixel-green); color: var(--pixel-green); }
+.pixel-surface-input { border: 2px solid var(--pixel-line); background: var(--pixel-bg); color: var(--pixel-text); }
+.pixel-surface-input:focus { border-color: var(--pixel-green); outline: none; }
+.pixel-sheet { border-left: 2px solid var(--pixel-line); background: var(--pixel-panel); }
+.pixel-error-line { background: color-mix(in oklab, var(--pixel-pink) 12%, transparent); }
+@media (max-width: 767px) {
+  .pixel-title { font-size: 10px; }
+  .engine-tab { min-width: 118px; }
+  .pixel-header { padding-top: 10px; padding-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

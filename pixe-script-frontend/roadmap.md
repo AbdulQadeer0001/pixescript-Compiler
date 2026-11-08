@@ -1,0 +1,4 @@
+- [x] Build the PixelScript compiler interface from the supplied guide.
+- [x] Connect editor actions, examples, saved programs, and run history to the supplied FastAPI endpoints.
+- [x] Verify engine interactions, responsive layout, and API request shapes.
+- [x] Tell the user how to point the preview at their local FastAPI and allow the preview origin in CORS.
