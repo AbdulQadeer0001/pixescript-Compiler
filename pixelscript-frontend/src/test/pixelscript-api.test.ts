@@ -1,9 +1,23 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { runAll, runEngine } from "@/lib/pixelscript-api";
+import { checkHealth, runAll, runEngine } from "@/lib/pixelscript-api";
 
 describe("PixelScript FastAPI requests", () => {
   afterEach(() => vi.unstubAllGlobals());
+
+  it("checks FastAPI connectivity through its health endpoint", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ status: "ok", database: "down" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(checkHealth()).resolves.toEqual({ status: "ok", database: "down" });
+
+    expect(fetchMock).toHaveBeenCalledWith("http://localhost:8000/api/health", expect.any(Object));
+  });
 
   it("posts only the selected engine and includes the source and program id", async () => {
     const fetchMock = vi.fn().mockResolvedValue(

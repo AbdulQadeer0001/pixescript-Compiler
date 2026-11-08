@@ -151,6 +151,7 @@ function PixelScriptWorkbench() {
   const [busyEngine, setBusyEngine] = useState<EngineName | "all" | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [apiConnected, setApiConnected] = useState(false);
+  const [apiChecking, setApiChecking] = useState(false);
   const [language, setLanguage] = useState<LanguageReference | null>(null);
   const [examples, setExamples] = useState<PixelScriptExample[]>([]);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -181,27 +182,37 @@ function PixelScriptWorkbench() {
     setApiConnected(true);
   }, []);
 
-  useEffect(() => {
-    void getLanguage()
-      .then(setLanguage)
-      .catch((error: Error) => setApiError(error.message));
-    void getExamples()
-      .then((list) => {
+  const retryApiConnection = useCallback(async () => {
+    setApiChecking(true);
+    setApiError(null);
+    try {
+      await checkHealth();
+      setApiConnected(true);
+
+      const [languageResult, examplesResult] = await Promise.allSettled([getLanguage(), getExamples()]);
+      if (languageResult.status === "fulfilled") setLanguage(languageResult.value);
+      if (examplesResult.status === "fulfilled") {
+        const list = examplesResult.value;
         setExamples(list);
         if (!sourceTouchedRef.current) {
           const sample = list.find((item) => item.id === "lab-sample");
           if (sample) setSource(sample.source);
         }
-      })
-      .catch((error: Error) => setApiError(error.message));
-    void checkHealth()
-      .then(() => {
-        setApiConnected(true);
-        void refreshPrograms().catch(() => setPrograms([]));
-        void refreshRuns().catch(() => setRuns([]));
-      })
-      .catch(() => setApiConnected(false));
+      }
+
+      void refreshPrograms().catch(() => setPrograms([]));
+      void refreshRuns().catch(() => setRuns([]));
+    } catch (error) {
+      setApiConnected(false);
+      setApiError(error instanceof Error ? error.message : "Could not reach FastAPI.");
+    } finally {
+      setApiChecking(false);
+    }
   }, [refreshPrograms, refreshRuns]);
+
+  useEffect(() => {
+    void retryApiConnection();
+  }, [retryApiConnection]);
 
   const lineCount = useMemo(() => Math.max(source.split("\n").length, 1), [source]);
   const currentResult = results[activeEngine];
@@ -478,8 +489,12 @@ function PixelScriptWorkbench() {
           <Alert variant="destructive" className="mb-4 border-2 border-pixel-pink bg-pixel-panel text-pixel-text">
             <AlertTriangle className="size-4" />
             <AlertTitle className="font-mono text-xs">FastAPI request failed</AlertTitle>
-            <AlertDescription className="font-mono text-xs text-pixel-dim">
-              {apiError} Check that the backend is running and its CORS settings allow this preview.
+            <AlertDescription className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-pixel-dim">
+              <span className="min-w-0 flex-1">{apiError} Check that the backend is running and allows this preview address.</span>
+              <Button variant="outline" size="sm" onClick={() => void retryApiConnection()} disabled={apiChecking}>
+                {apiChecking ? <LoaderCircle className="size-3.5 animate-spin" /> : <Activity className="size-3.5" />}
+                {apiChecking ? "CHECKING..." : "RETRY CONNECTION"}
+              </Button>
             </AlertDescription>
           </Alert>
         )}
