@@ -38,6 +38,7 @@ app.add_middleware(
         *settings.cors_origins,
         "https://id-preview--dc93beb8-59a5-456c-9a50-c5e54db2fb50.lovable.app",
     ])),
+    allow_origin_regex=settings.cors_origin_regex,
     allow_methods=["*"],
     allow_headers=["*"],
 )
